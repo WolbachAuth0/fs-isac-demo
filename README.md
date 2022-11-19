@@ -1,7 +1,7 @@
 
-# Multi-Organization Manager Demonstration Application
+# FS-ISAC Custom Okta Demonstration Application
 
-The Multi-Organization Manager is meant to demonstrate the capabilities of the Auth0 platform to allow users to
+The FS-ISAC Custom Okta Demo is meant to demonstrate the capabilities of the Auth0 platform to allow users to
 manage their own organizaitons. In the past, this has been a common ask from Auth0's customers. The intent is
 to provide an example appliction which permits organization managers to manage the following for their specific
 organization;
