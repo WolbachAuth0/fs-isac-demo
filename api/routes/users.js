@@ -18,12 +18,11 @@ router
   .route('/:user_id')
   .all(verifyJWT)                                   // verify signature on access token
   .all(checkJWTUserID)                              // verifies that the user id in the access token equals user_id in url param
-  .get(
-    checkJWTPermissions(['read:user_profile']),     // verify access token contains necessary permission(s)
-    users.getById                                   // execute the get User by Id function
-  )
   .patch(
-    checkJWTPermissions(['update:user_profile']),
-    // schemaValidator(),
-    users.updateProfile
+    checkJWTPermissions(['update:user_profile']),   // verify access token contains necessary permission(s)
+    // schemaValidator(),                              // verify that the request body matches the schema, else 400
+    users.updateProfile                             // execute the get User by Id function
+  )
+  .get(
+    users.getById                                   
   )
