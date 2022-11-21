@@ -1,83 +1,62 @@
-/<template>
+<template>
   <v-card>
 
-    <v-card-title>
-      <v-avatar tile v-if="logoIsAvailable">
-        <v-img :src="org.branding.logo_url" max-height="40" max-width="40" ></v-img>
-      </v-avatar>
-      <v-avatar tile v-else>
-        <v-progress-circular :size="40" color="primary" indeterminate></v-progress-circular>
-      </v-avatar>
+    <v-card class="pa-6">
+      <v-card-title>
+        User Profile
+      </v-card-title>
 
-      <h2 v-if="orgNameIsAvailable">{{ org.display_name }}</h2>
-    </v-card-title>
+      <v-card-text>
+        Manage your personal, contact, and security information.
+      </v-card-text>
 
-    <v-tabs v-model="tab">
-      <v-tabs-slider color="blue"></v-tabs-slider>
-      <v-tab key="profile">Profile</v-tab>
-    </v-tabs>
+      <v-card class="pa-6" color="surface">
+        <v-row>
+          <v-col cols="2">
+            <v-list-item class="px-2">
+              <v-list-item-avatar>
+                <img :src="profile.picture" :alt="profile.name">
+              </v-list-item-avatar>
+              <v-list-item-title>
+                Avatar
+              </v-list-item-title>
+            </v-list-item>
+          </v-col>
 
-    <v-tabs-items v-model="tab">
-      <v-tab-item key="profile">
-        <v-card class="pa-6" color="surface">
-          <v-card-title>
-            User Profile
-          </v-card-title>
+          <v-col cols="8">
+            <v-text-field v-model="profile.picture" label="Picture URL" :disabled="isDisabled"></v-text-field>
+          </v-col>
+        </v-row>
 
-          <v-card-text>
-            Manage your personal, contact, and security information.
-          </v-card-text>
+        <v-row>
+          <v-col cols="3">
+            <v-text-field v-model="profile.given_name" label="First Name" :disabled="isDisabled"></v-text-field>
+          </v-col>
+          <v-col cols="3">
+            <v-text-field v-model="profile.family_name" label="Last Name" :disabled="isDisabled"></v-text-field>
+          </v-col>
+          <v-col cols="3">
+            <v-text-field v-model="profile.email" label="Email" disabled></v-text-field>
+          </v-col>
+          <v-col cols="3">
+            <v-text-field v-model="profile.nickname" label="Nickname" :disabled="isDisabled"></v-text-field>
+          </v-col>
+        </v-row>
+      </v-card>
 
-          <v-card class="pa-6">
-            <v-row>
-              <v-col cols="2">
-                <v-list-item class="px-2">
-                  <v-list-item-avatar>
-                    <img :src="profile.picture" :alt="profile.name">
-                  </v-list-item-avatar>
-                  <v-list-item-title>
-                    Avatar
-                  </v-list-item-title>
-                </v-list-item>
-              </v-col>
+      <v-divider></v-divider>
 
-              <v-col cols="8">
-                <v-text-field v-model="profile.picture" label="Picture URL" :disabled="isDisabled"></v-text-field>
-              </v-col>
-            </v-row>
+      <v-card-text v-if="isDisabled">
+        NOTE: We cannot update the user profile when the user comes in from the {{ connection }} connection. Please
+        update the user profile with that identity provider.
+      </v-card-text>
 
-            <v-row>
-              <v-col cols="3">
-                <v-text-field v-model="profile.given_name" label="First Name" :disabled="isDisabled"></v-text-field>
-              </v-col>
-              <v-col cols="3">
-                <v-text-field v-model="profile.family_name" label="Last Name" :disabled="isDisabled"></v-text-field>
-              </v-col>
-              <v-col cols="3">
-                <v-text-field v-model="profile.email" label="Email" disabled></v-text-field>
-              </v-col>
-              <v-col cols="3">
-                <v-text-field v-model="profile.nickname" label="Nickname" :disabled="isDisabled"></v-text-field>
-              </v-col>
-            </v-row>
-          </v-card>
-
-          <v-divider></v-divider>
-
-          <v-card-text v-if="isDisabled">
-            NOTE: We cannot update the user profile when the user comes in from the {{ connection }} connection. Please
-            update the user profile with that identity provider.
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn color="primary" @click="saveChanges" :disabled="isDisabled">
-              Save Changes
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-tab-item>
-    </v-tabs-items>
-    
+      <v-card-actions>
+        <v-btn color="primary" @click="saveChanges" :disabled="isDisabled">
+          Save Changes
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </v-card>
 </template>
 
@@ -92,15 +71,11 @@ export default {
   data () {
     return {
       tab: 0,
-      org: {},
       profile: {},
-      orgAvailable: false,
     }
   },
   async created () {
-    const org = await this.fetchOrg()
     const profile = await this.fetchProfile()
-    this.org = org.data
     this.profile = {
       email: profile.data.email,
       given_name: profile.data.given_name,
@@ -127,12 +102,6 @@ export default {
     }
   },
   methods: {
-    async fetchOrg () {
-      const orgID = this.$auth.user.org_id
-      const accesstoken = await this.$auth.getTokenSilently()
-      const response = await this.$http(accesstoken).get(`/organizations/${orgID}`)
-      return response.data
-    },
     async fetchProfile () {
       const userId = this.$auth.user.sub
       const accesstoken = await this.$auth.getTokenSilently()

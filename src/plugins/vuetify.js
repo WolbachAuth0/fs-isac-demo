@@ -8,6 +8,15 @@ const okta = {
   darkblue: '#151a66',
 }
 
+const fsisac = {
+  blue: '#4a46de',
+  lightblue: '#09b5f7',
+  green: '#54b155',
+  purple: '#9fa0eb',
+  dark: '#011b34',
+  surface: '#e9e8fb'
+}
+
 export default new Vuetify({
   theme: {
     dark: false,
@@ -23,12 +32,14 @@ export default new Vuetify({
         error: colors.red.lighten4,
       },
       light: {
-        surface: colors.blue.lighten5,
-        primary: okta.darkblue,
-        secondary: okta.lightblue,
-        accent: colors.blue.base,
-        lightgrey: okta.lightgrey,
-        darkgrey: okta.darkgrey
+        surface: fsisac.surface,
+        primary: fsisac.blue,
+        secondary: fsisac.lightblue,
+        info: fsisac.green,
+        accent: colors.cyan,
+        success: colors.green.darken1,
+        warning: colors.yellow,
+        error: colors.red,
       }
     }
   },

@@ -11,11 +11,10 @@
 							 @show="show"
 							 @hide="hide"
 		></announcer>
-
-		<!-- <youtube-background></youtube-background> -->
-		
+	
 		<v-fade-transition mode="out-in" duration type="animation">
-			<v-main class="gradient" light>	
+			<!-- <v-main class="gradient" light> -->
+			<v-main light>
 				<v-container fluid>
 					<v-layout align-center justify-center>
 						<v-flex>
@@ -35,15 +34,13 @@
 <script>
 import Announcer from './components/Announcer.vue'
 import Navigation from './components/Navigation.vue'
-import YoutubeBackground from './components/YoutubeBackground.vue'
 import EventBus from './helpers/eventBus.js'
 
 export default {
 	name: 'app',
 	components: {
 		Announcer,
-		Navigation,
-		YoutubeBackground
+		Navigation
 	},
 	metaInfo: {
 		titleTemplate: 'Organization Manager | %s'
@@ -97,6 +94,14 @@ export default {
 
 <style scoped>
 	main.gradient {
-		background-image: linear-gradient(#4c73b8, #CFD8DC);
+		background-image: linear-gradient(to right, #ffffff, #4a4cdb);
+	}
+
+	main.lightribbon {
+		background-image: url("https://www.fsisac.com/hubfs/Banner%20Images/FS-ISAC_01-07.png");
+	}
+
+	main.darkribbon {
+		background-image: url("https://www.fsisac.com/hs-fs/hubfs/FS-ISAC_NewDNA_02_Purple.png?width=6251&amp;name=FS-ISAC_NewDNA_02_Purple.png&quot");
 	}
 </style>
