@@ -1,4 +1,3 @@
-  
 import { getInstance } from '@/plugins/auth0'
 
 export const authenticationGuard = (to, from, next) => {
