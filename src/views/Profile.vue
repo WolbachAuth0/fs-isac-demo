@@ -5,60 +5,109 @@
     <banner :titles="banner.titles" :texts="banner.texts"></banner>
 
     <v-card class="pa-6">
-      <v-card-title>
-        User Profile
-      </v-card-title>
+      <v-row>
+        <v-col cols=6 offset=1>
+          <v-card>
+            <v-card-title>
+              <h1>Keep your Profile up to date!</h1>
+            </v-card-title>
+            <v-card-text>
 
-      <v-card-text>
-        Manage your personal, contact, and security information.
-      </v-card-text>
+              <v-card-title class="primary--text">Why Maintain my Profile?</v-card-title>
+              <v-card-text>
+                Share the information here with the insurance providers to help them better service your needs
+              </v-card-text>
 
-      <v-card class="pa-6" color="surface">
-        <v-row>
-          <v-col cols="2">
-            <v-list-item class="px-2">
-              <v-list-item-avatar>
-                <img :src="profile.picture" :alt="profile.name">
-              </v-list-item-avatar>
-              <v-list-item-title>
-                Avatar
-              </v-list-item-title>
-            </v-list-item>
-          </v-col>
+            </v-card-text>
+          </v-card>
+        </v-col>
 
-          <v-col cols="8">
-            <v-text-field v-model="profile.picture" label="Picture URL" :disabled="isDisabled"></v-text-field>
-          </v-col>
-        </v-row>
+        <v-col cols=4>
+          <v-card color="surface">
+            <v-progress-linear value="100" height="20" class="primary--text"></v-progress-linear>
+            <v-card-title>
+              User Profile
+            </v-card-title>
+            <v-card-text>
+              Manage your personal, contact, and security information.
+            </v-card-text>
 
-        <v-row>
-          <v-col cols="3">
-            <v-text-field v-model="profile.given_name" label="First Name" :disabled="isDisabled"></v-text-field>
-          </v-col>
-          <v-col cols="3">
-            <v-text-field v-model="profile.family_name" label="Last Name" :disabled="isDisabled"></v-text-field>
-          </v-col>
-          <v-col cols="3">
-            <v-text-field v-model="profile.email" label="Email" disabled></v-text-field>
-          </v-col>
-          <v-col cols="3">
-            <v-text-field v-model="profile.nickname" label="Nickname" :disabled="isDisabled"></v-text-field>
-          </v-col>
-        </v-row>
-      </v-card>
+            <v-form>
+              <v-container fluid>
+                <v-row align="center">
+                  <v-col cols="12" class="px-8">
+                    
+                    <v-list-item class="px-2">
+                      <v-list-item-avatar>
+                        <img :src="profile.picture" :alt="profile.name">
+                      </v-list-item-avatar>
+                      <v-list-item-title>
+                        Avatar
+                      </v-list-item-title>
+                    </v-list-item>
 
-      <v-divider></v-divider>
+                    <v-text-field
+                      v-model="profile.picture"
+                      label="Picture URL"
+                      :disabled="isDisabled"
+                      outlined
+                    ></v-text-field>
 
-      <v-card-text v-if="isDisabled">
-        NOTE: We cannot update the user profile when the user comes in from the {{ connection }} connection. Please
-        update the user profile with that identity provider.
-      </v-card-text>
+                    <v-text-field
+                      v-model="profile.given_name"
+                      label="First Name"
+                      :disabled="isDisabled"
+                      outlined
+                    ></v-text-field>
 
-      <v-card-actions>
-        <v-btn color="primary" @click="saveChanges" :disabled="isDisabled">
-          Save Changes
-        </v-btn>
-      </v-card-actions>
+                    <v-text-field
+                      v-model="profile.family_name"
+                      label="Last Name"
+                      :disabled="isDisabled"
+                      outlined
+                    ></v-text-field>
+
+                    <v-text-field
+                      v-model="profile.email"
+                      label="Email"
+                      outlined
+                      disabled
+                    ></v-text-field>
+
+                    <v-text-field
+                      v-model="profile.nickname"
+                      label="Nickname"
+                      :disabled="isDisabled"
+                      outlined
+                    ></v-text-field>
+
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+
+            <v-divider></v-divider>
+
+            <v-card-text v-if="isDisabled">
+              NOTE: We cannot update the user profile when the user comes in from the {{ connection }} connection. Please
+              update the user profile with that identity provider.
+            </v-card-text>
+
+            <v-card-actions class="pa-4">
+              <v-container>
+                <v-row>
+                  <v-col cols=12>
+                    <v-btn class="primary" block @click="saveChanges" :disabled="isDisabled">
+                      Save Changes
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-actions>
+          </v-card>
+
+        </v-col>
+      </v-row>
     </v-card>
   </v-card>
 </template>
