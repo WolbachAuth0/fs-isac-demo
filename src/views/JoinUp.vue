@@ -102,11 +102,10 @@
           <v-card color="surface">
             <v-progress-linear value="100" height="20" class="primary--text"></v-progress-linear>
             <v-card-title>
-              Fill out this form to apply for institutional membership. 
-              Most of our offerings are available to member financial firms only.
+              Fill out this form to apply for institutional membership. Most of our offerings are available to member financial firms only.
             </v-card-title>
 
-            <v-form v-model="valid" ref="form" lazy-validation>
+            <v-form>
               <v-container fluid>
                 <v-row align="center">
                   <v-col cols=12 class="px-8">
@@ -241,22 +240,24 @@
               </v-container>
             </v-form>
 
+            <v-divider></v-divider>
+
             <v-card-actions class="pa-4">
               <v-container>
-              <v-row>
-                <v-col cols=12>
-                  <v-btn class="primary" block @click="submit">
-                    Submit
-                  </v-btn>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols=12>
-                  <v-btn class="secondary" block @click="reset">
-                    Reset
-                  </v-btn>
-                </v-col>
-              </v-row>
+                <v-row>
+                  <v-col cols=12>
+                    <v-btn class="primary" block @click="submit">
+                      Submit
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols=12>
+                    <v-btn class="secondary" block @click="reset">
+                      Reset
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-container>
             </v-card-actions>
           </v-card>
