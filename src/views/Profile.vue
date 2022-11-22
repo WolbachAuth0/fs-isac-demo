@@ -1,6 +1,9 @@
 <template>
   <v-card>
 
+    <!-- Banner Card -->
+    <banner :titles="banner.titles" :texts="banner.texts"></banner>
+
     <v-card class="pa-6">
       <v-card-title>
         User Profile
@@ -61,6 +64,7 @@
 </template>
 
 <script>
+import Banner from '@/components/Banner.vue'
 import EventBus from './../helpers/eventBus.js'
 
 export default {
@@ -68,23 +72,38 @@ export default {
   metaInfo: {
     title: 'User Profile',
   },
+  components: {
+    Banner
+  },
   data () {
     return {
-      tab: 0,
-      profile: {},
+      banner: {
+        titles: [
+        ],
+        texts: [
+          'Update your user profile from here'
+        ]
+      },
+      profile: {
+        email: '',
+        given_name: '',
+        family_name: '',
+        nickname: '',
+        name: '',
+        picture: ''
+      },
     }
   },
   async created () {
     const profile = await this.fetchProfile()
-    this.profile = {
-      email: profile.data.email,
-      given_name: profile.data.given_name,
-      family_name: profile.data.family_name,
-      nickname: profile.data.nickname,
-      name: profile.data.name,
-      picture: profile.data.picture
-    }
-      
+    
+    this.profile.email = profile.data.email,
+    this.profile.given_name = profile.data.given_name,
+    this.profile.family_name = profile.data.family_name,
+    this.profile.nickname = profile.data.nickname,
+    this.profile.name = profile.data.name,
+    this.profile.picture = profile.data.picture
+    
     console.log(profile.data)
   },
   computed: {
