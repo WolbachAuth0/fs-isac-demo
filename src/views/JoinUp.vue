@@ -2,27 +2,7 @@
   <v-card>
 
     <!-- Banner Card -->
-    <v-card :dark="!isDark" :light="isDark" >
-      <v-img height="250px" :src="otherRibbon">
-        <v-container container fill-height fluid>
-          <v-row align="center" justify="center">
-            <v-col>
-
-              <v-card-title class="justify-center">
-                <h1>Join Financial Firms Around the World</h1>
-              </v-card-title>
-              <v-card-title class="justify-center">
-                <h1>Become an FS-ISAC Member</h1>
-              </v-card-title>
-              <v-card-text class="text-center">
-                  The only global cyber intelligence sharing community solely focused on financial services
-              </v-card-text>
-
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-img>
-    </v-card>
+    <banner :titles="banner.titles" :texts="banner.texts"></banner>
 
     <v-card class="pa-6">
       <v-row>
@@ -136,60 +116,82 @@
                       v-model="region.value"
                       :items="region.items"
                       :label="region.label"
-                      :rules="region.rules"
+                      :error-messages="regionErrors"
+                      @change="$v.region.value.$touch()"
+                      @blur="$v.region.value.$touch()"
                       outlined
                       required
                     ></v-select>
 
-                    <div v-if="region.value != null">
-                      <label>{{ contact.company.hint }}</label>
+                    <div v-if="region.value !== ''">
+                      <label>{{ company.hint }}</label>
                       <v-text-field
+                        :label="company.label"
+                        v-model="company.value"
+                        :counter="company.maxLength"
+                        :error-messages="companyErrors"
+                        @input="$v.company.value.$touch()"
+                        @blur="$v.company.value.$touch()"
                         outlined
-                        :label="contact.company.label"
-                        v-model="contact.company.value"
-                        :rules="contact.company.rules"
+                        required
                       ></v-text-field>
 
-                      <label>{{ contact.first.hint }}</label>
+                      <label>{{ first.hint }}</label>
                       <v-text-field
+                        :label="first.label"
+                        v-model="first.value"
+                        :counter="first.maxLength"
+                        :error-messages="firstErrors"
+                        @input="$v.first.value.$touch()"
+                        @blur="$v.first.value.$touch()"
                         outlined
-                        :label="contact.first.label"
-                        v-model="contact.first.value"
-                        :rules="contact.first.rules"
+                        required
                       ></v-text-field>
 
-                      <label>{{ contact.last.hint }}</label>
+                      <label>{{ last.hint }}</label>
                       <v-text-field
+                        :label="last.label"
+                        v-model="last.value"
+                        :counter="last.maxLength"
+                        :error-messages="lastErrors"
+                        @input="$v.last.value.$touch()"
+                        @blur="$v.last.value.$touch()"
                         outlined
-                        :label="contact.last.label"
-                        v-model="contact.last.value"
-                        :rules="contact.last.rules"
+                        required
                       ></v-text-field>
 
-                      <label>{{ contact.email.hint }}</label>
+                      <label>{{ email.hint }}</label>
                       <v-text-field
+                        :label="email.label"
+                        v-model="email.value"
+                        :error-messages="emailErrors"
+                        @input="$v.email.value.$touch()"
+                        @blur="$v.email.value.$touch()"
                         outlined
-                        :label="contact.email.label"
-                        v-model="contact.email.value"
-                        :rules="contact.email.rules"
+                        required
                       ></v-text-field>
-
                     </div>
 
                     <label>{{ industry.hint }}</label>
                     <v-select
+                      v-model="industry.value"
                       :items="industry.items"
                       :label="industry.label"
-                      :rules="industry.rules"
+                      :error-messages="industryErrors"
+                      @change="$v.industry.value.$touch()"
+                      @blur="$v.industry.value.$touch()"
                       outlined
                       required
                     ></v-select>
 
                     <label>{{ how.hint }}</label>
                     <v-select
+                      v-model="how.value"
                       :items="how.items"
                       :label="how.label"
-                      :rules="how.rules"
+                      :error-messages="howErrors"
+                      @change="$v.how.value.$touch()"
+                      @blur="$v.how.value.$touch()"
                       outlined
                       required
                     ></v-select>
@@ -198,7 +200,6 @@
                     <v-radio-group v-model="radioGroup.value">
                       <v-radio
                         v-for="(radio, index) in radioGroup.items"
-                        :rules="radio.rules"
                         :key="index"
                         :label="radio"
                         :value="radio"
@@ -207,9 +208,9 @@
 
                     <label>{{ code.hint }}</label>
                     <v-text-field
-                      outlined
                       :label="code.label"
                       v-model="code.value"
+                      outlined
                     ></v-text-field>
 
                     <p>
@@ -241,9 +242,22 @@
             </v-form>
 
             <v-card-actions class="pa-4">
-              <v-btn class="primary" block @click="submit">
-                Submit
-              </v-btn>
+              <v-container>
+              <v-row>
+                <v-col cols=12>
+                  <v-btn class="primary" block @click="submit">
+                    Submit
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols=12>
+                  <v-btn class="secondary" block @click="reset">
+                    Reset
+                  </v-btn>
+                </v-col>
+              </v-row>
+              </v-container>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -254,13 +268,31 @@
 </template>
 
 <script>
+import Banner from '@/components/Banner.vue'
+import EventBus from './../helpers/eventBus.js'
+import { validationMixin } from 'vuelidate'
+import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
+
 export default {
   name: 'Join',
   metaInfo: {
     title: 'Join Us!',
   },
+  components: {
+    Banner
+  },
+  mixins: [ validationMixin ],
   data () {
     return {
+      banner: {
+        titles: [
+          'Join Financial Firms Around the World',
+          'Become an FS-ISAC Member'
+        ],
+        texts: [
+          'The only global cyber intelligence sharing community solely focused on financial services'
+        ]
+      },
       valid: false,
       region: {
         items: [
@@ -271,10 +303,7 @@ export default {
         ],
         hint: 'Region',
         label: 'Please Select',
-        value: null,
-        rules: [
-          v => !!v || 'Please complete this required field.'
-        ]
+        value: '',
       },
       industry: {
         items: [
@@ -293,45 +322,31 @@ export default {
         ],
         hint: 'Industry Type',
         label: 'Please Select',
-        value: null,
-        rules: [
-          v => !!v || 'Please complete this required field.'
-        ]
+        value: '',
       },
-      contact: {
-        company: {
-          hint: 'Company Name',
-          label: '',
-          value: '',
-          rules: [
-            v => !!v || 'Please complete this required field.'
-          ]
-        },
-        first: {
-          hint: 'First Name',
-          label: '',
-          value: '',
-          rules: [
-            v => !!v || 'Name is required'
-          ]
-        },
-        last: {
-          hint: 'Last Name',
-          label: '',
-          value: '',
-          rules: [
-            v => !!v || 'Name is required'
-          ]
-        },
-        email: {
-          hint: 'Email Address',
-          label: '',
-          value: '',
-          rules: [
-            v => !!v || 'E-mail is required',
-            v => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(v) || 'E-mail must be valid',
-          ]
-        }
+      company: {
+        hint: 'Company Name',
+        label: '',
+        value: '',
+        minLength: 3,
+        maxLength: 30
+      },
+      first: {
+        hint: 'First Name',
+        label: '',
+        value: '',
+        maxLength: 10
+      },
+      last: {
+        hint: 'Last Name',
+        label: '',
+        value: '',
+        maxLength: 30
+      },
+      email: {
+        hint: 'Email Address',
+        label: '',
+        value: '',
       },
       how: {
         items: [
@@ -348,13 +363,10 @@ export default {
         ],
         hint: 'How did you hear about FS-ISAC?',
         label: 'Please Select',
-        value: null,
-        rules: [
-          v => !!v || 'Please complete this required field.'
-        ]
+        value: '',
       },
       radioGroup: {
-        value: '',
+        value: null,
         hint: 'What is the primary reason you are interested in joining FS-ISAC?',
         items: [
           'Attend FS-ISAC summits and events',
@@ -363,9 +375,6 @@ export default {
           'Receive critical cyber-intelligence specific to financial services',
           'Satisfy regulatory recommendation'
         ],
-        rules: [
-          v => !!v|| 'Please select an option'
-        ]
       },
       code: {
         hint: 'Relationship Code',
@@ -378,12 +387,83 @@ export default {
       }
     }
   },
+  validations: {
+    region: { value: { required } },
+    industry: { value: { required } },
+    how: { value: { required } },
+    company: {
+      value: {
+        required,
+        minLength: minLength(3),
+        maxLength: maxLength(30)
+      }
+    },
+    first: {
+      value: {
+        required,
+        maxLength: maxLength(10)
+      }
+    },
+    last: {
+      value: {
+        required,
+        maxLength: maxLength(30)
+      }
+    },
+    email: {
+      value: { required, email }
+    },
+    radioGroup: {
+      value: { required },
+    },
+    code: {},
+    consent: {}
+  },
+  computed: {
+    regionErrors () {
+      const validator = this.$v.region.value
+      return this.selectErrors(validator)
+    },
+    industryErrors () {
+      const validator = this.$v.industry.value
+      return this.selectErrors(validator)
+    },
+    howErrors () {
+      const validator = this.$v.how.value
+      return this.selectErrors(validator)
+    },
+    companyErrors () {
+      const validator = this.$v.company.value
+      const context = this.company
+      return this.inputErrors(validator, context)
+    },
+    firstErrors () {
+      const validator = this.$v.first.value
+      const context = this.first
+      return this.inputErrors(validator, context)
+    },
+    lastErrors () {
+      const validator = this.$v.last.value
+      const context = this.last
+      return this.inputErrors(validator, context)
+    },
+    emailErrors () {
+      const validator = this.$v.email.value
+      const errors = []
+      if (!validator.$dirty) return errors
+      !validator.email && errors.push('Must be valid email')
+      !validator.required && errors.push('Email is required')
+      return errors
+    },
+  },
   methods: {
     async submit () {
-      const isValid = this.validate()
+      this.$v.$touch()
+      const isValid = !this.$v.$invalid
+      console.log(isValid)
       const organization = {
-        name: this.contact.company.value,
-        display_name: this.contact.company.value,
+        name: this.company.value,
+        display_name: this.company.value,
         metadata: {
           industry: this.industry.value,
           region: this.region.value,
@@ -394,18 +474,47 @@ export default {
       }
 
       const json = JSON.stringify(organization, null, 2)
-      alert(`form is${isValid ? ' ' : ' NOT '}valid`)
-      alert(`submit new organiation\n${json}`)
+
+      const announcement = {
+        text: `form is${isValid ? ' ' : ' NOT '}valid. <br><br>${json}`,
+        type: isValid ? 'success' : 'error',
+        top: true,
+        right: true,
+        left: false
+      }
+      EventBus.$emit('announce', announcement)
     },
-    validate () {
-      this.$refs.form.validate()
+    inputErrors (validator, context) {
+      const errors = []
+      if (!validator.$dirty) return errors
+      if (context.minLength) {
+        !validator.minLength && errors.push(`${context.hint} must be at least ${context.minLength} characters long.`)
+      }
+      if (context.maxLength) {
+        !validator.maxLength && errors.push(`${context.hint} must be at most ${context.maxLength} characters long.`)
+      }
+      !validator.required && errors.push(`${context.hint} is required.`)
+      return errors
+    },
+    selectErrors (validator) {
+      const errors = []
+      if (!validator.$dirty) return errors
+      !validator.required && errors.push('Please complete this required field.')
+      return errors
     },
     reset () {
-      this.$refs.form.reset()
-    },
-    resetValidation () {
-      this.$refs.form.resetValidation()
-    },
+      this.$v.$reset()
+      this.region.value = ''
+      this.industry.value = ''
+      this.how.value = ''
+      this.company.value = ''
+      this.first.value = ''
+      this.last.value = ''
+      this.email.value = ''
+      this.radioGroup.value = null
+      this.code.value = ''
+      this.consent.value = false
+    }
   }
 }
 </script>

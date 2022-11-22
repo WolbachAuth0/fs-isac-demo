@@ -1,6 +1,6 @@
 import Vue from 'vue'
+import Vuelidate from 'vuelidate'
 import App from '@/App.vue'
-import router from './router'
 
 // plugins
 import Axios from '@/plugins/axios'
@@ -9,9 +9,10 @@ import { Auth0Plugin } from '@/plugins/auth0'
 
 // mixins
 import ThemeMixin from '@/mixins/ThemeToggle'
-
+import router from './router'
 import store from '@/store'
 
+Vue.use(Vuelidate)
 Vue.use(Axios)
 Vue.use(Auth0Plugin, {
   domain: process.env.VUE_APP_CUSTOM_DOMAIN,
