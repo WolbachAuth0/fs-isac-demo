@@ -92,7 +92,7 @@
 					</v-tab>
 					<v-tab to="/dev-connection">
 						<v-icon>{{ icons.mdiDeveloperBoard }}</v-icon>
-						Join Us!
+						Developer
 					</v-tab>
 					<v-tab to="/profile" v-if="$auth.isAuthenticated">
 						<v-icon>{{ icons.mdiAccountCircle }}</v-icon>
