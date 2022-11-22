@@ -5,9 +5,10 @@ import Meta from 'vue-meta'
 
 // Views
 import Home from '@/views/Home.vue'
+import JoinUp from '@/views/JoinUp.vue'
+import Social from '@/views/Social.vue'
 import Tokens from '@/views/Tokens.vue'
 import Profile from '@/views/Profile.vue'
-import JoinUp from '@/views/JoinUp.vue'
 
 Vue.use(Meta, {
 	keyName: 'metaInfo',
@@ -30,6 +31,11 @@ const router = new Router({
       path: '/join',
       name: 'Register Institution',
       component: JoinUp,
+    },
+    {
+      path: '/dev-connection',
+      name: 'Social Connection',
+      component: Social
     },
     {
       path: '/profile',

@@ -90,6 +90,10 @@
 						<v-icon>{{ icons.mdiAccountPlus }}</v-icon>
 						Join Us!
 					</v-tab>
+					<v-tab to="/dev-connection">
+						<v-icon>{{ icons.mdiDeveloperBoard }}</v-icon>
+						Join Us!
+					</v-tab>
 					<v-tab to="/profile" v-if="$auth.isAuthenticated">
 						<v-icon>{{ icons.mdiAccountCircle }}</v-icon>
 						Profile
@@ -108,7 +112,9 @@ import {
 	mdiLoginVariant,
 	mdiLogoutVariant,
 	mdiAccountCircle,
-	mdiAccountPlus, 
+	mdiAccountPlus,
+	mdiDeveloperBoard,
+
 } from '@mdi/js'
 
 export default {
@@ -128,7 +134,8 @@ export default {
 			mdiLoginVariant,
 			mdiLogoutVariant,
 			mdiAccountCircle,
-			mdiAccountPlus
+			mdiAccountPlus,
+			mdiDeveloperBoard
 		}
 	}),
 	methods: {
