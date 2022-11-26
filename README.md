@@ -55,8 +55,8 @@ VUE_APP_AUTH0_AUDIENCE=<identifier-of-auth0-org-manager-api>
 
 # values present in api-server application
 # client-id + secret of M2M integration with Auth0 management api
-AUTH0_API_ID=<auth0-client-id-m2m>
-AUTH0_API_CLIENT_SECRET=<auth0-client-secret-m2m>
+AUTH0_MGMT_API_ID=<auth0-client-id-m2m>
+AUTH0_MGMT_API_SECRET=<auth0-client-secret-m2m>
 ```
 
 Then, the `.env.development`, `.env.local` and `.env.production` files should contain the following
