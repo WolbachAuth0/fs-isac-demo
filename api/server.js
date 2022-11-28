@@ -30,6 +30,7 @@ if(process.env.NODE_ENV === 'production') {
 }
 app.use(oidcMiddleware)
 app.use('/', serveStatic(path.join(__dirname, './../dist')))
+app.use('/public', serveStatic(path.join(__dirname, './../public')))
 
 // API routes
 app.use('/api', require('./routes/hello')) // should serve api spec
