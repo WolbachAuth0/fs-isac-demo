@@ -9,6 +9,7 @@ import JoinUp from '@/views/JoinUp.vue'
 import Social from '@/views/Social.vue'
 import Tokens from '@/views/Tokens.vue'
 import Profile from '@/views/Profile.vue'
+import Dashboard from '@/views/Dashboard.vue'
 
 Vue.use(Meta, {
 	keyName: 'metaInfo',
@@ -49,13 +50,12 @@ const router = new Router({
       component: Tokens,
       beforeEnter: authenticationGuard
     },
-    
-    // {
-    //   path: '/dashboard',
-    //   name: 'Admin Dashboard',
-    //   component: Dashboard,
-    //   beforeEnter: roleGuardian('Administrator')
-    // },
+    {
+      path: '/administrator',
+      name: 'Administrator Dashboard',
+      component: Dashboard,
+      beforeEnter: roleGuardian('Administrator')
+    },
   ]
 })
 

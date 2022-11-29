@@ -90,9 +90,9 @@
 						<v-icon>{{ icons.mdiAccountPlus }}</v-icon>
 						Join Us!
 					</v-tab>
-					<v-tab to="/dev-connection">
+					<v-tab to="/administrator" v-if="hasRole('Administrator')">
 						<v-icon>{{ icons.mdiDeveloperBoard }}</v-icon>
-						Developer
+						Administrator
 					</v-tab>
 					<v-tab to="/profile" v-if="$auth.isAuthenticated">
 						<v-icon>{{ icons.mdiAccountCircle }}</v-icon>
@@ -164,6 +164,16 @@ export default {
 				this.$auth.logout({ returnTo: process.env.VUE_APP_DOMAIN })
         this.$router.push({ path: '/' })
 			}
+		},
+		hasRole (rolename) {
+			if (!this.$auth.isAuthenticated) {
+				return false
+			}
+
+			const clientID = process.env.VUE_APP_CLIENT_ID
+			const data = this.$auth.isAuthenticated ? this.$auth.user[`${clientID}/data`] : { }
+			const roles = data?.roles || []
+			return roles.includes(rolename)
 		}
 	}
 }
