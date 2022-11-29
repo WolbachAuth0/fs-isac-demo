@@ -75,12 +75,7 @@ export default {
 			this.alert.top = top
 			this.alert.right = right
 			this.alert.left = left
-
 			this.alert.visible = true
-
-			if (process.env.VUE_APP_MODE === 'development') {
-				console.log('announcer event: payload = ', this.alert)
-			}
 		},
 		show (payload) {
 			this.alert.visible = true
