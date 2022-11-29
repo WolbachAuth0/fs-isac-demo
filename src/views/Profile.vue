@@ -81,6 +81,10 @@
                       outlined
                     ></v-text-field>
 
+                    <v-checkbox
+                      v-model="profile.enableMFA"
+                      label="Enable MFA"
+                    ></v-checkbox>
                   </v-col>
                 </v-row>
               </v-container>
@@ -139,7 +143,8 @@ export default {
         family_name: '',
         nickname: '',
         name: '',
-        picture: ''
+        picture: '',
+        enableMFA: false
       },
     }
   },
@@ -183,7 +188,10 @@ export default {
         family_name: this.profile.family_name,
         nickname: this.profile.nickname,
         name: this.profile.name,
-        picture: this.profile.picture
+        picture: this.profile.picture,
+        user_metadata: {
+          enableMFA: this.profile.enableMFA
+        }
       }
       const response = await this.$http(accesstoken).patch(`/users/${this.$auth.user.sub}`, body)
       const announcement = {
