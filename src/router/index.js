@@ -20,6 +20,7 @@ Vue.use(Meta, {
 Vue.use(Router)
 
 // ?invitation=bf0ZSEo1KDATKrzoCMage9tWT0SwAyJ8&organization=org_Fxi2QqCuSYrk8rVd&organization_name=okta
+// https://auth0.com/docs/authenticate/login/auth0-universal-login/configure-default-login-routes#invite-organization-members
 
 const router = new Router({
   mode: 'history',
