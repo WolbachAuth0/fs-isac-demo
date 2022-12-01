@@ -202,7 +202,6 @@ export default {
         left: false
       }
       EventBus.$emit('announce', announcement)
-      console.log(response.data)
       return response.data
     }
   }
