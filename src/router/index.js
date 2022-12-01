@@ -36,10 +36,12 @@ const router = new Router({
         const query = Object.assign(to.query, {
           response_type: 'code',
           client_id: process.env.VUE_APP_AUTH0_CLIENT_ID,
-          redirect_uri: `${process.env.VUE_APP_DOMAIN}/profile`
+          redirect_uri: `${process.env.VUE_APP_DOMAIN}/profile`,
+          response_mode: 'query'
         })
         const qs = new URLSearchParams(query).toString()
-        window.location.href = `https://${process.env.VUE_APP_CUSTOM_DOMAIN}/authorize?${qs}`
+        const redirectTo = `https://${process.env.VUE_APP_CUSTOM_DOMAIN}/authorize?${qs}`
+        window.location.href = redirectTo
       }
     },
     {
