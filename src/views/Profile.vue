@@ -168,9 +168,10 @@ export default {
       return this.org && this.org.display_name
     },
     connection () {
-      return this.$auth.user.sub.split('|')[0]
+      return this.$auth.user?.sub.split('|')[0]
     },
     isDisabled () {
+      if (!this.connection) { return false }
       return !['auth0', 'email', 'sms'].includes(this.connection)
     }
   },

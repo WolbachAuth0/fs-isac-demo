@@ -170,7 +170,7 @@ export default {
 				return false
 			}
 
-			const clientID = process.env.VUE_APP_CLIENT_ID
+			const clientID = process.env.VUE_APP_AUTH0_CLIENT_ID
 			const data = this.$auth.isAuthenticated ? this.$auth.user[`${clientID}/data`] : { }
 			const roles = data?.roles || []
 			return roles.includes(rolename)
