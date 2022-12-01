@@ -8,17 +8,22 @@
 							 :top="alert.top"
 							 :right="alert.right"
 							 :left="alert.left"
-							 @show="show"
-							 @hide="hide"
+							 @show="showAnnouncer"
+							 @hide="hideAnnouncer"
 		></announcer>
 	
 		<v-fade-transition mode="out-in" duration type="animation">
-			<!-- <v-main class="gradient" light> -->
+
 			<v-main light>
 				<v-container fluid>
 					<v-layout align-center justify-center>
 						<v-flex>
         			<router-view :key="$route.fullPath"></router-view>
+
+							<congratulations :show="dialog.visible"
+															 :organization="dialog.organization"
+															 :email="dialog.email"
+							></congratulations>
 						</v-flex>
 					</v-layout>
 				</v-container>
@@ -35,18 +40,25 @@
 import Announcer from './components/Announcer.vue'
 import Navigation from './components/Navigation.vue'
 import EventBus from './helpers/eventBus.js'
+import Congratulations from './components/Congratulations.vue'
 
 export default {
 	name: 'app',
 	components: {
 		Announcer,
-		Navigation
+		Navigation,
+		Congratulations,
 	},
 	metaInfo: {
 		titleTemplate: 'Organization Manager | %s'
 	},
 	data() {
 		return {
+			dialog: {
+				visible: false,
+				organization: '',
+				email: ''
+			},
 			alert: {
         visible: false,
         text: '',
@@ -67,8 +79,18 @@ export default {
 			console.log('vue app audience: ', process.env.VUE_APP_AUTH0_AUDIENCE)
 		}
 		EventBus.$on('announce', this.makeAnnouncement)
+		EventBus.$on('dialog', this.makeDialog)
+		EventBus.$on('hideDialog', this.hideDialog)
 	},
 	methods: {
+		makeDialog ({ organization='org-name', email='email' }) {
+			this.dialog.organization = organization
+			this.dialog.email = email
+			this.dialog.visible = true
+		},
+		hideDialog () {
+			this.dialog.visible = false
+		},
 		makeAnnouncement ({ text='announcement text', type='success', top=true, right=true, left=false }) {
 			this.alert.text = text
 			this.alert.type = type
@@ -77,26 +99,12 @@ export default {
 			this.alert.left = left
 			this.alert.visible = true
 		},
-		show (payload) {
+		showAnnouncer () {
 			this.alert.visible = true
 		},
-		hide (payload) {
+		hideAnnouncer () {
 			this.alert.visible = false
 		}
 	}
 }
 </script>
-
-<style scoped>
-	main.gradient {
-		background-image: linear-gradient(to right, #ffffff, #4a4cdb);
-	}
-
-	main.lightribbon {
-		background-image: url("https://www.fsisac.com/hubfs/Banner%20Images/FS-ISAC_01-07.png");
-	}
-
-	main.darkribbon {
-		background-image: url("https://www.fsisac.com/hs-fs/hubfs/FS-ISAC_NewDNA_02_Purple.png?width=6251&amp;name=FS-ISAC_NewDNA_02_Purple.png&quot");
-	}
-</style>
