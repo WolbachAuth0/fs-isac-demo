@@ -1,4 +1,5 @@
 import { getInstance } from '@/plugins/auth0'
+const metadataKey = `${process.env.VUE_APP_AUTH0_CLIENT_ID}/data`
 
 export const authenticationGuard = (to, from, next) => {
   const authService = getInstance()
@@ -28,7 +29,6 @@ export const authenticationGuard = (to, from, next) => {
   }
 }
 
-
 export const roleGuardian = function (rolename) {
   
   return function (to, from, next) {
@@ -57,7 +57,7 @@ export const roleGuardian = function (rolename) {
 
     function hasRole () {
       if (!authService.isAuthenticated) { return false }
-      const roles = authService.user['science-experiment/roles'] ?? []
+      const roles = authService.user[metadataKey]?.roles ?? []
       const hasRole = !rolename || roles.includes(rolename)
       return hasRole
     }

@@ -36,27 +36,22 @@ const router = new Router({
       component: JoinUp,
     },
     {
-      path: '/dev-connection',
-      name: 'Social Connection',
-      component: Social
-    },
-    {
       path: '/profile',
       name: 'Profile',
       component: Profile,
-      beforeEnter: authenticationGuard
+      // beforeEnter: authenticationGuard
     },
     {
       path: '/tokens',
       name: 'Tokens',
       component: Tokens,
-      beforeEnter: authenticationGuard
+      // beforeEnter: authenticationGuard
     },
     {
       path: '/administrator',
       name: 'Administrator Dashboard',
       component: Dashboard,
-      beforeEnter: roleGuardian('Administrator')
+      // beforeEnter: roleGuardian('Administrator')
     },
   ]
 })
