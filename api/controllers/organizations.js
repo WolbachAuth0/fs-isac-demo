@@ -21,18 +21,23 @@ const management = require('./../models/management')(scopes)
 const http = require('axios')
 
 module.exports = {
+  // orgs
   list,
   getByID,
-  getMembers,
   update,
+  join,
+  // org members
+  getMembers,
   readMemberRoles,
   addMemberRoles,
   removeMemberRoles,
+  // org connections
   listEnabledConnections,
   getEnabledConnection,
   createEnabledConnection,
   updateEnabledConnection,
   deleteConnection,
+  // org invitations
   listInvitations,
   getInvitation,
   createInvitation,
@@ -117,6 +122,7 @@ module.exports = {
 }
 
 function handleError (req, res, error) {
+  console.log(error)
   const payload = {
     status: parseInt(error.statusCode) || 500,
     message: error.message || 'An error occurred.',
@@ -194,6 +200,105 @@ async function update (req, res) {
     handleError(req, res, error)
   }
 }
+
+async function join (req, res) {
+  try {
+    // create new DB connection
+    const dbName = `org-${String(req.body.name).replace(' ', '-').trim()}-db`
+    const db = {
+      name: dbName,
+      strategy: 'auth0',
+      options: {
+        mfa: {
+          active: true,
+          return_enroll_settings: true
+        },
+        validation: {
+          username: {
+            max: 15,
+            min: 1
+          }
+        },
+        disable_signup: false,
+        passwordPolicy: 'good',
+        strategy_version: 2,
+        requires_username: false,
+        brute_force_protection: true
+      },
+      enabled_clients: [ process.env.VUE_APP_AUTH0_CLIENT_ID ],
+      realms: [ dbName ],
+      metadata: {}
+    }
+    const userstore = await management.createConnection(db)
+
+    const org = {
+      name: req.body.name,
+      display_name: req.body.display_name,
+      // default branding
+      branding: {
+        logo_url: req.body?.branding?.logo_url || '',
+        colors: {
+          primary: req.body?.branding?.colors?.primary || '',
+          page_background: req.body?.branding?.colors?.page_background || ''
+        }
+      },
+      metadata: req.body.metadata,
+      enabled_connections: [
+        { connection_id: userstore.id, assign_membership_on_login: true },
+        // social network connection?
+        // {
+        //   connection_id: '',
+        //   assign_membership_on_login: false
+        // }
+      ]
+    }
+    
+    // create new org
+    const organization = await management.organizations.create(org)
+
+    // send invitation to org
+    const invitation = {
+      inviter: { name: 'admin@fs-isac-demo.com' },
+      invitee: { email: req.body.user.email },
+      client_id: process.env.VUE_APP_AUTH0_CLIENT_ID,
+      connection_id: userstore.id,
+      app_metadata: {
+        member_type: 'owner',
+        roles: [
+          'FS-ISAC User',
+          'Administrator'
+        ]
+      },
+      user_metadata: {
+        enableMFA: false
+      },
+      roles: [
+        'rol_xD8N9z29qrOhAHbQ',
+        'rol_U83Li0nk55MRSz8y'
+      ],
+      ttl_sec: 3600,
+      send_invitation_email: true
+    } 
+    const invite = await management.organizations.createInvitation({ id: organization.id }, invitation)
+
+    // respond to requestor
+    const payload = {
+      status: 200,
+      message: `created organization: ${organization.name}`,
+      data: {
+        organization,
+        database: userstore,
+        invite
+      }
+    }
+    const json = responseFormatter(req, res, payload)
+    res.status(payload.status).json(json)
+  } catch (error) {
+    handleError(req, res, error)
+  }
+}
+
+// async function remove (req, res) {}
 
 // roles
 async function readMemberRoles (req, res) {

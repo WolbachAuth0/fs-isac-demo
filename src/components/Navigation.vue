@@ -86,7 +86,7 @@
 						<v-icon>{{ icons.mdiHomeCircle }}</v-icon>
 						About
 					</v-tab>
-					<v-tab to="/join">
+					<v-tab to="/join" v-if="!$auth.isAuthenticated">
 						<v-icon>{{ icons.mdiAccountPlus }}</v-icon>
 						Join Us!
 					</v-tab>

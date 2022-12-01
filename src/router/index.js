@@ -19,6 +19,8 @@ Vue.use(Meta, {
 })
 Vue.use(Router)
 
+// ?invitation=bf0ZSEo1KDATKrzoCMage9tWT0SwAyJ8&organization=org_Fxi2QqCuSYrk8rVd&organization_name=okta
+
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,

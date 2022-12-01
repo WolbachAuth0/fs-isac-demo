@@ -15,7 +15,16 @@ function checkJWTOrgID (req, res, next) {
 // Organizations
 router
   .route('/')
-  .get(organizations.list)
+  .get(
+    organizations.list
+  )
+
+router
+  .route('/join')
+  .post(
+    // schemaValidator(organizations.schema.organization),
+    organizations.join
+  )
 
 router.route('/:org_id')  // https://domain/api/v1/organizations/:org_id
   .all(verifyJWT)         // checks signature on the access token
