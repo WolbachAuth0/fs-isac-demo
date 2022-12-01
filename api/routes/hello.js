@@ -26,9 +26,10 @@ router
     }
   })
 
-// http://localhost:8081/api/login?invitation=W6yRtawKU1wmi9vY9Y0GbjGSpEQErLvq&organization=org_poSk5O5ljabdHiKV&organization_name=okta
-/*
-This endpoint has to be here to redirect invitation links to the signup screen.
+/**
+  This endpoint has to be here to redirect invitation links to the signup screen.
+  
+  http://localhost:8081/api/login?invitation=W6yRtawKU1wmi9vY9Y0GbjGSpEQErLvq&organization=org_poSk5O5ljabdHiKV&organization_name=okta
 */
 router
   .route('/login')
