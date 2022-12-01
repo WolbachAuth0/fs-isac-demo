@@ -15,7 +15,7 @@
 
               <v-card-title class="primary--text">Why Maintain my Profile?</v-card-title>
               <v-card-text>
-                Share the information here with the insurance providers to help them better service your needs
+                Share the information here with the providers to help them better service your needs
               </v-card-text>
 
             </v-card-text>
@@ -132,9 +132,10 @@ export default {
     return {
       banner: {
         titles: [
+          'Building a network of finanancial security professionals'
         ],
         texts: [
-          'Update your user profile from here'
+          'Join our network to access others with your expertise'
         ]
       },
       profile: {
