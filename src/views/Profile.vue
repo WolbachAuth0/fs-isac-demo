@@ -13,9 +13,14 @@
             </v-card-title>
             <v-card-text>
 
+              <v-card-title class="primary--text">Join the FS-ISAC Member Network</v-card-title>
+              <v-card-text>
+                Simplify logging into the platforms of other major providers in our network.
+              </v-card-text>
+
               <v-card-title class="primary--text">Why Maintain my Profile?</v-card-title>
               <v-card-text>
-                Share the information here with the providers to help them better service your needs
+                Share the information here with the providers to help them better service your needs.
               </v-card-text>
 
             </v-card-text>
