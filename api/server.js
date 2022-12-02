@@ -33,7 +33,7 @@ app.use('/', serveStatic(path.join(__dirname, './../dist')))
 app.use('/public', serveStatic(path.join(__dirname, './../public')))
 
 // API routes
-app.use('/api', require('./routes/hello')) // should serve api spec
+app.use('/api', require('./routes/hello'))
 app.use('/api/organizations', require('./routes/organizations'))
 app.use('/api/roles', require('./routes/roles'))
 app.use('/api/users', require('./routes/users'))
