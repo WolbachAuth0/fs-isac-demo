@@ -42,7 +42,7 @@ router
     })
     const qs = new URLSearchParams(query).toString()
     const to = `https://${process.env.VUE_APP_CUSTOM_DOMAIN}/authorize?${qs}`
-    logger.info(`\n${to}`)
-    logger.info(qs)
+    // logger.info(`\n${to}`)
+    // logger.info(qs)
     res.redirect(to)
   })
