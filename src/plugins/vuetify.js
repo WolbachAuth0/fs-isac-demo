@@ -23,6 +23,7 @@ export default new Vuetify({
     themes: {
       dark: {
         surface: colors.grey.darken2,
+        dark: colors.white,
         primary: colors.blue.lighten3,
         secondary: colors.blueGrey.darken4,
         info: colors.blueGrey.lighten3,
@@ -33,6 +34,7 @@ export default new Vuetify({
       },
       light: {
         surface: fsisac.surface,
+        dark: fsisac.dark,
         primary: fsisac.blue,
         secondary: fsisac.lightblue,
         info: fsisac.green,

@@ -2,7 +2,11 @@
   <v-card>
 
     <v-card-title>
-      <v-avatar tile v-if="logoIsAvailable">
+      <v-chip class="ma-2" color="primary" v-if="orgTypeIsAvailable">
+        {{ org.metadata.type }}
+      </v-chip>
+
+      <v-avatar tile v-if="logoIsAvailable" class="pr-4">
         <v-img :src="org.branding.logo_url" max-height="40" max-width="40" ></v-img>
       </v-avatar>
       <v-avatar tile v-else>
@@ -12,12 +16,16 @@
       <h2 v-if="orgNameIsAvailable">{{ org.display_name }}</h2>
     </v-card-title>
 
+    <v-card-text>
+      Use the administrator dashboard to manage your organization's settings, members and policies.
+    </v-card-text>
+
     <v-tabs v-model="tab">
       <v-tabs-slider color="blue"></v-tabs-slider>
       <v-tab key="overview">Overview</v-tab>
       <v-tab key="members">Members</v-tab>
       <v-tab key="invitations">Invitations</v-tab>
-      <v-tab key="connections">Connections</v-tab>
+      <!-- <v-tab key="connections">Connections</v-tab> -->
     </v-tabs>
 
     <v-tabs-items v-model="tab">
@@ -33,9 +41,9 @@
         <org-invitations :org="org"></org-invitations>
       </v-tab-item>
 
-      <v-tab-item key="connections">
+      <!-- <v-tab-item key="connections">
         <org-connections :org="org"></org-connections>
-      </v-tab-item>
+      </v-tab-item> -->
     </v-tabs-items>
 
   </v-card>
@@ -76,10 +84,13 @@ export default {
   },
   computed: {
     logoIsAvailable () {
-      return this.org && this.org.branding && this.org.branding.logo_url
+      return !!this.org?.branding?.logo_url
     },
     orgNameIsAvailable () {
-      return this.org && this.org.display_name
+      return !!this.org?.display_name
+    },
+    orgTypeIsAvailable () {
+      return !!this.org?.metadata?.type
     }
   },
   methods: {

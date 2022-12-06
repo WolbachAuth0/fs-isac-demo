@@ -23,10 +23,26 @@
           <v-card-text class="grey--text">{{ hints.display_name }}</v-card-text>
         </v-col>
       </v-row>
+
+      <v-row>
+        <v-col cols="6">
+          <v-text-field v-model="org.metadata.type" 
+                        :label="labels.type"
+                        :hint="hints.type"
+                        disabled
+          ></v-text-field>
+          <v-card-text class="grey--text">{{ hints.type }}</v-card-text>
+        </v-col>
+
+        <v-col cols="6">
+          <v-checkbox v-model="enableMFA" :label="labels.mfa"></v-checkbox>
+          <v-card-text class="grey--text">{{ hints.mfa }}</v-card-text>
+        </v-col>
+      </v-row>
     </v-card>
 
     <v-divider></v-divider>
-    
+
     <v-card-title>Branding</v-card-title>
     <v-card-text>
       These are branding settings associated with your organization.
@@ -83,49 +99,6 @@
     </v-card>
     <v-divider></v-divider>
 
-    <v-card-title>Metadata</v-card-title>
-    <v-card-text>
-      Metadata related to this organization.
-    </v-card-text>
-
-    <v-card class="pa-6">
-      <v-row>
-        <v-col cols="5">
-          <v-text-field v-model="metadata.key"
-                        label="key ..." 
-                        :disabled="false"
-                        prepend-icon="mdi-key-outline"
-          ></v-text-field>
-        </v-col>
-
-        <v-col cols="5">
-          <v-text-field v-model="metadata.value"
-                        label="value ..."
-                        :disabled="false"
-                        prepend-icon="mdi-tag-outline"
-          ></v-text-field>
-        </v-col>
-
-        <v-col cols="2">
-          <v-btn @click="addMetadata">
-            <v-icon left>mdi-plus</v-icon>
-            Add
-          </v-btn>
-        </v-col>
-      </v-row>
-
-      <v-data-table :headers="metadata.headers"
-                    :items="metadata.items"
-                    hide-default-footer
-      >
-        <template v-slot:[`item.index`]="{ item }">
-          <v-btn icon color="red" @click="removeMetadata(item.key)">
-              <v-icon>mdi-trash-can-outline</v-icon>
-            </v-btn>
-        </template>
-      </v-data-table>
-    </v-card>
-
     <v-divider></v-divider>
 
     <v-card-actions> 
@@ -153,14 +126,18 @@ export default {
         display_name: 'Display Name',
         logo_url: 'Logo URL',
         primary: 'Primary Color',
-        background: 'Page Background Color'
+        background: 'Page Background Color',
+        type: 'Organization Type',
+        mfa: 'Require MFA'
       },
       hints: {
         name: 'This is any human-readable identifier for the organization that will be used by end-users to direct them to their organization in your application.',
         display_name: 'If set, this is the name that will be displayed to end-users for this organization in any interaction with them.',
         logo_url: 'If set, this is the logo that will be displayed to end-users for this organization in any interaction with them.',
         primary: 'If set, this will be the primary color for CTAs that will be displayed to end-users for this organization in your application\'s authentication flows.',
-        background: 'If set, this will be the page background color that will be displayed to end-users for this organization in in your application\'s authentication flows.'
+        background: 'If set, this will be the page background color that will be displayed to end-users for this organization in in your application\'s authentication flows.',
+        type: 'An FS-ISAC organization is either a "Carrier" or a "Broker". Carriers control the platform and have the right to bring new broker organizations on board.',
+        mfa: 'If this box is toggled, members of the organization will be required to use multifactor authentication to login to the FS-ISAC platform.'
       },
       org: {
         id: 'org_DnITNWXfRvtMKNu6',
@@ -172,35 +149,19 @@ export default {
             primary: '#7C64A5',
             page_background: '#322D6B'
           }
+        },
+        metadata: {
+          enableMFA: 'false',
+          type: 'Carrier'
         }
       },
-      metadata: {
-        key: null,
-        value: null,
-        items: [],
-        headers: [
-          { text: 'Key', value: 'key', filterable: false, sortable: false },
-          { text: 'Value', value: 'value', filterable: false, sortable: false },
-          { text: '', value: 'index' },
-        ]
-      }
+      enableMFA: false
     }    
   },
   computed: {
-    metadataLimit () {
-      const count = Object.keys(this.metadata.items).length
-      return 10 - count
-    },
-    metadataObject () {
-      const metadata = {}
-      for (let item of this.metadata.items) {
-        metadata[item.key] = item.value
-      }
-      return metadata
-    },
     orgID () {
       return this.$auth.user.org_id
-    },
+    }
   },
   async mounted () {
     const response = await this.fetchOrg()
@@ -219,15 +180,11 @@ export default {
         page_background: org.branding.colors.page_background
       }
     }
-
-    this.metadata.items = Object.keys(org.metadata)
-      .map(key => {
-        return {
-          key,
-          value: org.metadata[key],
-          index: key
-        }
-      })
+    this.org.metadata = {
+      enableMFA: org.metadata?.enableMFA || 'false',
+      type: org.metadata?.type || 'Broker'
+    }
+    this.enableMFA = this.org.metadata.enableMFA == 'false' ? false : true
   },
   methods: {
     async fetchOrg () {
@@ -248,7 +205,10 @@ export default {
             page_background: this.org.branding.colors.page_background
           }
         },
-        metadata: this.metadataObject
+        metadata: {
+          enableMFA: String(this.enableMFA),
+          type: this.org.metadata.type
+        }
       }
       const response = await this.$http(accesstoken).patch(`/organizations/${this.orgID}`, body)
       const announcement = {
@@ -261,29 +221,6 @@ export default {
       EventBus.$emit('announce', announcement)
 
       return response.data
-    },
-    addMetadata () {
-      // is this key already in the metadata?
-      const key = this.metadata.key
-      const value = this.metadata.value
-      const index = this.metadata.items.findIndex(x => x.key == key)
-      if (index > -1) {
-        // then update it ...
-        this.metadata.items[index].value = this.metadata.value
-        this.metadata.items[index].index = key
-      } else {
-        // add a new one ...
-        const item = { key, value, index: key }
-        this.metadata.items.push(item)
-      }
-      this.metadata.key = null
-      this.metadata.value = null
-    },
-    removeMetadata (key) {
-      const index = this.metadata.items.findIndex(x => x.key == key)
-      if (index > -1) {
-        this.metadata.items.splice(index, 1);
-      }
     }
   }
 }

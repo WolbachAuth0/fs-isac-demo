@@ -60,7 +60,7 @@
 			</v-toolbar-title>
 
 			<!-- Theme Selector -->
-			<v-menu left bottom >
+			<v-menu left bottom>
 				<template v-slot:activator="{ on, attrs }">
 					<v-btn icon v-bind="attrs" v-on="on">
 						<v-icon>mdi-dots-vertical</v-icon>
@@ -86,22 +86,24 @@
 						<v-icon>{{ icons.mdiHomeCircle }}</v-icon>
 						About
 					</v-tab>
-					<v-tab to="/join" v-if="!$auth.isAuthenticated">
+					<!-- <v-tab to="/join" v-if="orgType	== 'Carrier'">
 						<v-icon>{{ icons.mdiAccountPlus }}</v-icon>
 						Join Us!
 					</v-tab>
 					<v-tab to="/administrator" v-if="hasRole('Administrator')">
 						<v-icon>{{ icons.mdiDeveloperBoard }}</v-icon>
 						Administrator
-					</v-tab>
+					</v-tab> -->
 					<v-tab to="/profile" v-if="$auth.isAuthenticated">
 						<v-icon>{{ icons.mdiAccountCircle }}</v-icon>
-						Profile
+						My Dashboard
 					</v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
 
+		<!-- Navigation Drawer -->
+		<drawer v-if="$auth.isAuthenticated"></drawer>
 	</div>
 </template>
 
@@ -116,9 +118,13 @@ import {
 	mdiDeveloperBoard,
 
 } from '@mdi/js'
+import Drawer from './Drawer.vue'
 
 export default {
 	name: 'Navigation',
+	components: {
+		Drawer
+	},
 	data: () => ({
 		links: {
 			oktahomeURL: 'https://www.okta.com/',
@@ -141,10 +147,7 @@ export default {
 	methods: {
     // https://auth0.com/blog/complete-guide-to-vue-user-authentication/#Add-User-Authentication
 		async authenticate (organization) {
-			if (this.$auth.isAuthenticated) {
-				const roles = this.$auth.isAuthenticated ? this.$auth.user['science-experiment/roles'] : []
-				this.redirect(roles)
-			} else {
+			if (!this.$auth.isAuthenticated) {
 				this.login(organization)
 			}
 		},
@@ -174,7 +177,7 @@ export default {
 			const data = this.$auth.isAuthenticated ? this.$auth.user[`${clientID}/data`] : { }
 			const roles = data?.roles || []
 			return roles.includes(rolename)
-		}
+		}	
 	}
 }
 </script>

@@ -6,7 +6,7 @@
 
     <v-card class="pa-6">
       <v-row>
-        <v-col cols=6 offset=1>
+        <v-col cols=7>
           <v-card>
             <v-card-title>
               <h1>Keep your Profile up to date!</h1>
@@ -27,7 +27,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols=4>
+        <v-col cols=5>
           <v-card color="surface">
             <v-progress-linear value="100" height="20" class="primary--text"></v-progress-linear>
             <v-card-title>
@@ -164,7 +164,7 @@ export default {
     this.profile.name = profile.data.name,
     this.profile.picture = profile.data.picture
     
-    console.log(profile.data)
+    // console.log(profile.data)
   },
   computed: {
     logoIsAvailable () {
