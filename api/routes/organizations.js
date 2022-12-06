@@ -18,13 +18,10 @@ router
   .get(
     organizations.list
   )
-
-router
-  .route('/join')
   .post(
     // schemaValidator(organizations.schema.organization),
-    organizations.join
-  )
+    organizations.create
+  ) 
 
 router.route('/:org_id')  // https://domain/api/v1/organizations/:org_id
   .all(verifyJWT)         // checks signature on the access token

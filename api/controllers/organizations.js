@@ -18,6 +18,7 @@ const scopes = [
   'delete:organization_invitations'
 ]
 const management = require('./../models/management')(scopes)
+const helpers = require('./../models/helpers')
 const http = require('axios')
 
 module.exports = {
@@ -25,7 +26,7 @@ module.exports = {
   list,
   getByID,
   update,
-  join,
+  create,
   // org members
   getMembers,
   readMemberRoles,
@@ -201,35 +202,11 @@ async function update (req, res) {
   }
 }
 
-async function join (req, res) {
+async function create (req, res) {
   try {
     // create new DB connection
     const dbName = `org-${String(req.body.name).replace(' ', '-').trim()}-db`
-    const db = {
-      name: dbName,
-      strategy: 'auth0',
-      options: {
-        mfa: {
-          active: true,
-          return_enroll_settings: true
-        },
-        validation: {
-          username: {
-            max: 15,
-            min: 1
-          }
-        },
-        disable_signup: false,
-        passwordPolicy: 'good',
-        strategy_version: 2,
-        requires_username: false,
-        brute_force_protection: true
-      },
-      enabled_clients: [ process.env.VUE_APP_AUTH0_CLIENT_ID ],
-      realms: [ dbName ],
-      metadata: {}
-    }
-    const userstore = await management.createConnection(db)
+    const userstore = await helpers.createUserstore(management, { name: dbName })
 
     const org = {
       name: req.body.name,
@@ -244,12 +221,8 @@ async function join (req, res) {
       },
       metadata: req.body.metadata,
       enabled_connections: [
-        { connection_id: userstore.id, assign_membership_on_login: true },
-        // social network connection?
-        // {
-        //   connection_id: '',
-        //   assign_membership_on_login: false
-        // }
+        { connection_id: userstore.id, assign_membership_on_login: true }, // new DB connection
+        // { connection_id: '', assign_membership_on_login: false },       // social network connection
       ]
     }
     
@@ -265,7 +238,7 @@ async function join (req, res) {
       app_metadata: {
         member_type: 'owner',
         roles: [
-          'FS-ISAC User',
+          'Member',
           'Administrator'
         ]
       },
@@ -297,8 +270,6 @@ async function join (req, res) {
     handleError(req, res, error)
   }
 }
-
-// async function remove (req, res) {}
 
 // roles
 async function readMemberRoles (req, res) {

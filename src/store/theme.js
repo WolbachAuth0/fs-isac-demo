@@ -1,11 +1,4 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-// import Theme from './theme'
-// import Organization from './organization'
-
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default {
   state: {
     isDark: false,
     theme: {
@@ -48,8 +41,10 @@ export default new Vuex.Store({
       }
     }
   },
-  modules: {
-    // Theme,
-    // Organization
-  }
-})
+  // actions: {
+  //   example ({ state, commit, rootState }) {
+  //     // state is the modules local state
+  //     // rootState is the global state
+  //   }
+  // },
+}
