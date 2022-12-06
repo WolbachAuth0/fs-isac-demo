@@ -5,12 +5,24 @@
 * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
 */
 exports.onExecutePostLogin = async (event, api) => {
-  const domain = event.tenant.id
+
   const client_id = event.client.client_id
-  const metadata = event.user.app_metadata
   const roles = event.authorization?.roles?.length ? event.authorization.roles : []
-    
-  api.accessToken.setCustomClaim(`${domain}/roles`, roles)
-  api.idToken.setCustomClaim(`${domain}/roles`, roles)
-  api.idToken.setCustomClaim(`${client_id}/data`, metadata)
+
+  // prepare data
+  let idTokenData = {
+    roles
+  }
+
+  if (event?.organization) {
+    idTokenData.member_type = event.user.app_metadata?.member_type || 'member'
+    idTokenData.org = {
+      display_name: event.organization.display_name,
+      type: event.organization.metadata.type
+    }
+  }
+  // add data to id token
+  api.idToken.setCustomClaim(`${client_id}/data`, idTokenData)
+  // add data to access token 
+  api.accessToken.setCustomClaim(`${client_id}/roles`, roles)
 }
