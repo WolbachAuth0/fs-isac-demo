@@ -181,7 +181,6 @@ export default {
         label: '',
         value: '',
       },
-      
       branding: {
         logo_url: 'https://cdn.svgapi.com/vector/41770/insurance.svg',
         colors: {

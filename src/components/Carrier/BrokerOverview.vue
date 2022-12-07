@@ -63,16 +63,27 @@ export default {
       brokers: []
     }
   },
-  async mounted () {
-    const orgs = await this.getOrganizations()
-    this.brokers = orgs.data
-      .filter(x => x.metadata?.type == 'Broker')
+  props: {
+    count: Number
+  },
+  watch: {
+    count () {
+      console.log('watcher fired', this.count)
+      this.updateBrokers()  
+    }
+  },
+  mounted () {
+    this.updateBrokers()
   },
   methods: {
     async getOrganizations () {
       const response = await this.$http(null).get(`/organizations`)
-      console.log(response.data.data)
       return response.data
+    },
+    async updateBrokers () {
+      const orgs = await this.getOrganizations()
+      this.brokers = orgs.data
+        .filter(x => x.metadata?.type == 'Broker')
     },
     chipColor (typestring) {
       return typestring == 'Carrier' ? 'primary' : 'secondary'
