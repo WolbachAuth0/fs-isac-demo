@@ -52,7 +52,7 @@ export default {
   async mounted () {
     const orgs = await this.getOrganizations()
     this.brokers = orgs.data
-      // .filter(x => x.metadata?.type == 'Broker')
+      .filter(x => x.metadata?.type == 'Broker')
   },
   methods: {
     async getOrganizations () {
