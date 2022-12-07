@@ -8,7 +8,9 @@ import Home from '@/views/Home.vue'
 import JoinUp from '@/views/JoinUp.vue'
 import Tokens from '@/views/Tokens.vue'
 import Profile from '@/views/Profile.vue'
-import Dashboard from '@/views/Dashboard.vue'
+import BrokerDashboard from '@/views/BrokerDashboard.vue'
+import AdminDashboard from '@/views/AdminDashboard.vue'
+import MemberDashboard from '@/views/MemberDashboard.vue'
 
 Vue.use(Meta, {
 	keyName: 'metaInfo',
@@ -48,10 +50,22 @@ const router = new Router({
       beforeEnter: authenticationGuard
     },
     {
+      path: '/brokers',
+      name: 'Brokers',
+      component: BrokerDashboard,
+      beforeEnter: authenticationGuard
+    },
+    {
       path: '/administrator',
       name: 'Administrator Dashboard',
-      component: Dashboard,
+      component: AdminDashboard,
       beforeEnter: roleGuardian('Administrator')
+    },
+    {
+      path: '/member',
+      name: 'Member Dashboard',
+      component: MemberDashboard,
+      beforeEnter: roleGuardian('Member')
     },
   ]
 })

@@ -2,8 +2,13 @@
 
   <v-card>
     <v-card-title>
-      Debug Viewer
+      Token Decoder
     </v-card-title>
+
+    <v-card-text>
+      This is a view of the tokens returned from the Okta CIC authorization server. 
+      It is presented here for demonstration purposes only.
+    </v-card-text>
 
     <v-tabs v-model="tab">
       <v-tabs-slider color="blue"></v-tabs-slider>

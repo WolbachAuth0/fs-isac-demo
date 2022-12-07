@@ -29,18 +29,12 @@
 
 			<!-- Login / Logout -->
 			<v-toolbar-title>
-
-				<v-btn v-if="$auth.isAuthenticated" outlined fab link to="/profile">
-					<v-avatar dark>
-						<img :src="$auth.user.picture" :alt="$auth.user.name">
-					</v-avatar>
-				</v-btn>
-
-				<v-btn v-else outlined fab dark @click="authenticate()">
-					<v-avatar color="blue darken-3">
-						<v-icon x-large>{{ icons.mdiAccountCircle }}</v-icon>
-					</v-avatar>
-				</v-btn>
+				<v-avatar rounded color="white" v-if="$auth.isAuthenticated">
+					<org-logo :orgId="orgId" :maxHeight="50" :maxWidth="50"></org-logo>
+				</v-avatar>
+				<v-chip v-if="$auth.isAuthenticated" pill class="ml-4 white">
+            {{ orgType }}
+				</v-chip>
 
 				<v-btn v-if="$auth.isAuthenticated" dark class="success ma-6" @click="logout()">
 					Logout
@@ -118,12 +112,14 @@ import {
 	mdiDeveloperBoard,
 
 } from '@mdi/js'
-import Drawer from './Drawer.vue'
+import Drawer from '@/components/Drawer.vue'
+import OrgLogo from '@/components/OrgLogo.vue'
 
 export default {
 	name: 'Navigation',
 	components: {
-		Drawer
+		Drawer,
+		OrgLogo
 	},
 	data: () => ({
 		links: {
@@ -144,6 +140,24 @@ export default {
 			mdiDeveloperBoard
 		}
 	}),
+	computed: {
+		orgId () {
+			const data = this.$auth.isAuthenticated ? this.$auth.user.org_id : ''
+      return data
+    },
+		orgDisplayName () {
+      const clientID = process.env.VUE_APP_AUTH0_CLIENT_ID
+			const data = this.$auth.isAuthenticated ? this.$auth.user[`${clientID}/data`] : { }
+      const display_name = data?.org?.display_name || ''
+      return display_name
+    },
+    orgType () {
+      const clientID = process.env.VUE_APP_AUTH0_CLIENT_ID
+			const data = this.$auth.isAuthenticated ? this.$auth.user[`${clientID}/data`] : { }
+      const orgType = data?.org?.type || ''
+      return orgType
+    }
+	},
 	methods: {
     // https://auth0.com/blog/complete-guide-to-vue-user-authentication/#Add-User-Authentication
 		async authenticate (organization) {
