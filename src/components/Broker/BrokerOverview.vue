@@ -41,7 +41,7 @@ export default {
     return {
       table: {
         headers: [
-          { text: 'id', value: 'id', sortable: false, align: 'start' },
+          { text: 'Logo', value: 'id', sortable: false, align: 'start' },
           { text: 'Name', value: 'display_name', sortable: true },
           { text: 'Type', value: 'metadata.type', sortable: true }
         ]
