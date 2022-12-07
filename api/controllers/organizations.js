@@ -222,7 +222,7 @@ async function create (req, res) {
       metadata: req.body.metadata,
       enabled_connections: [
         { connection_id: userstore.id, assign_membership_on_login: true }, // new DB connection
-        { connection_id: 'con_5cywibKrExhz7wLx', assign_membership_on_login: false },       // social network connection
+        // { connection_id: process.env.SOCIAL_NETWORK_CONNECTION_ID, assign_membership_on_login: false }
       ]
     }
     
