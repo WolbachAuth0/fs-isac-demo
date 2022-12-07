@@ -427,7 +427,7 @@ export default {
 
       let response
       try {
-        response = await this.$http(null).post(`/organizations/join`, organization)
+        response = await this.$http(null).post(`/organizations`, organization)
         announcement.text = response?.data?.message
         announcement.type = 'success'
         this.congratulations(organization)
