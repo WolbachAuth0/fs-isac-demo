@@ -22,17 +22,17 @@
 
     <v-tabs v-model="tab">
       <v-tabs-slider color="blue"></v-tabs-slider>
-      <v-tab key="overview">Overview</v-tab>
-      <v-tab key="inviter">Add Brokers</v-tab>
+      <v-tab key="overview" @click="tabChange">Overview</v-tab>
+      <v-tab key="inviter" @click="tabChange">Add Brokers</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab">
       <v-tab-item key="overview">
-        <broker-overview></broker-overview>
+        <broker-overview :count="counts[0]"></broker-overview>
       </v-tab-item>
 
       <v-tab-item key="inviter">
-        <broker-creator></broker-creator>
+        <broker-creator :count="counts[1]"></broker-creator>
       </v-tab-item>
     </v-tabs-items>
 
@@ -55,6 +55,7 @@ export default {
   data () {
     return {
       tab: null,
+      counts: [ 0, 0 ],
       org: {},
       orgAvailable: false,
     }
@@ -80,6 +81,9 @@ export default {
       const accesstoken = await this.$auth.getTokenSilently()
       const response = await this.$http(accesstoken).get(`/organizations/${orgID}`)
       return response.data
+    },
+    tabChange (tabnumber) {
+      this.counts[tabnumber]++
     }
   }
 }
