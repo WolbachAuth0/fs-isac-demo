@@ -17,19 +17,36 @@
     </v-card-title>
 
     <v-card-text>
-      Use the broker dashboard to interact with the application.
+      Use this page for a general user to interact with the FS-ISAC application.
     </v-card-text>
 
     <v-tabs v-model="tab">
       <v-tabs-slider color="blue"></v-tabs-slider>
-      <v-tab key="overview">Overview</v-tab>
+      <v-tab key="overview">Application</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab">
       <v-tab-item key="overview">
-        <v-card>
-          This is where the members of the broker's organization will interact with the application.
+        
+        <v-card class="pa-6" color="surface">
+          <v-card-title>User Portal</v-card-title>
+          <v-card-text>
+            This page is where any user with the "Member" role would interact with the application.
+          </v-card-text>
+          
+          <v-card class="pa-6">
+            <v-card-title>
+              Application
+            </v-card-title>
+
+            <v-card-text>
+              General work in the application happens here.
+            </v-card-text>
+          </v-card>
+
         </v-card>
+
+
       </v-tab-item>
     </v-tabs-items>
 

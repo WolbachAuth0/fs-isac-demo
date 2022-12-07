@@ -23,13 +23,16 @@
     <v-tabs v-model="tab">
       <v-tabs-slider color="blue"></v-tabs-slider>
       <v-tab key="overview">Overview</v-tab>
+      <v-tab key="inviter">Add Brokers</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab">
       <v-tab-item key="overview">
-        <v-card>
-          This is where Carrier administrators will onboard new brokers
-        </v-card>
+        <broker-overview></broker-overview>
+      </v-tab-item>
+
+      <v-tab-item key="inviter">
+        <broker-creator></broker-creator>
       </v-tab-item>
     </v-tabs-items>
 
@@ -37,16 +40,22 @@
 </template>
 
 <script>
-export default {
+import BrokerOverview from '@/components/Broker/BrokerOverview.vue'
+import BrokerCreator from '@/components/Broker/BrokerCreator.vue'
 
+
+export default {
   name: 'Dashboard',
   metaInfo: {
     title: 'Dashboard',
   },
+  components: {
+    BrokerOverview,
+    BrokerCreator
+  },
   data () {
     return {
       tab: null,
-      user: {},
       org: {},
       orgAvailable: false,
     }
@@ -54,10 +63,6 @@ export default {
   async created () {
     const response = await this.fetchOrg()
     this.org = response.data
-    if (process.env.VUE_APP_MODE === 'development') {
-      console.log('mounted: Dashboard')
-      console.log(response.data)
-    }
   },
   computed: {
     logoIsAvailable () {

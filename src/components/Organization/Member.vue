@@ -94,12 +94,6 @@ export default {
           role.assigned = found ? true : false
           return role
         })
-
-        if (process.env.VUE_APP_MODE === 'development') {
-          console.log('connection: visible changed', newValue, oldValue)
-          console.log('fetched member roles')
-          console.log(this.roles)
-        }
       }
       
       this.isShown = newValue
