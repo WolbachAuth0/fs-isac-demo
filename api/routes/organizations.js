@@ -23,17 +23,17 @@ router
     organizations.create
   ) 
 
-router.route('/:org_id')  // https://domain/api/v1/organizations/:org_id
-  .all(verifyJWT)         // checks signature on the access token
-  .all(checkJWTOrgID)     // checks to make sure the access token has organization id scope
+router.route('/:org_id')                                  // https://domain/api/v1/organizations/:org_id
+  .all(verifyJWT)                                         // checks signature on the access token
   .get(
     checkJWTPermissions(['read:organizations']),
     organizations.getByID
   )
   .patch(
-    checkJWTPermissions(['update:organizations']),
-    schemaValidator(organizations.schema.organization),
-    organizations.update
+    checkJWTOrgID,                                        // checks to make sure the access token has organization id scope
+    checkJWTPermissions(['update:organizations']),        // checks that the access token has the update:organizations permission
+    schemaValidator(organizations.schema.organization),   // checks that the request body matches the expected schema
+    organizations.update                                  // executes the request
   )
 
 // Organization Members
