@@ -99,10 +99,6 @@ export default {
       left: false,
     };
     EventBus.$emit("announce", announcement);
-
-    if (process.env.VUE_APP_MODE === "development") {
-      console.log(`mounted: OrgConnections`, response.data);
-    }
   },
   methods: {
     async submitConnection(newConnection) {

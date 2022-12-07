@@ -180,11 +180,7 @@ export default {
       const url = `/organizations/${this.$auth.user.org_id}/invitations`
       const accesstoken = await this.$auth.getTokenSilently()
       const response = await this.$http(accesstoken).post(url, body)
-      
-      if (process.env.VUE_APP_MODE === 'development') {
-        console.log('create invitation response', response.data)
-      }
-      
+           
       const announcement = {
         text: response.data.message,
         type: response.data.success ? 'success' : 'error',
