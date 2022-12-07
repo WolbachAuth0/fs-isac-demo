@@ -68,7 +68,7 @@ export default {
         case 'warning':
           return 'warning'
         case 'info':
-          return 'info'
+          return 'primary'
         default:
           return 'secondary'
       }
