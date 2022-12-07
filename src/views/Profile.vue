@@ -6,7 +6,7 @@
 
     <v-card class="pa-6">
       <v-row>
-        <v-col cols=7>
+        <v-col cols=5>
           <v-card>
             <v-card-title>
               <h1>Keep your Profile up to date!</h1>
@@ -27,47 +27,34 @@
           </v-card>
         </v-col>
 
-        <v-col cols=5>
+        <v-col cols=7>
           <v-card color="surface">
             <v-progress-linear value="100" height="20" class="primary--text"></v-progress-linear>
+            
             <v-card-title>
               User Profile
             </v-card-title>
+
+            <v-list-item class="px-2">
+              <v-list-item-avatar>
+                <img :src="profile.picture" :alt="profile.name">
+              </v-list-item-avatar>
+              <v-list-item-title>
+                {{ profile.email }}
+              </v-list-item-title>
+            </v-list-item>
+
             <v-card-text>
               Manage your personal, contact, and security information.
             </v-card-text>
 
             <v-form>
               <v-container fluid>
-                <v-row align="center">
-                  <v-col cols="12" class="px-8">
-                    
-                    <v-list-item class="px-2">
-                      <v-list-item-avatar>
-                        <img :src="profile.picture" :alt="profile.name">
-                      </v-list-item-avatar>
-                      <v-list-item-title>
-                        Avatar
-                      </v-list-item-title>
-                    </v-list-item>
-
-                    <v-text-field
-                      v-model="profile.picture"
-                      label="Picture URL"
-                      :disabled="isDisabled"
-                      outlined
-                    ></v-text-field>
-
+                <v-row>
+                  <v-col cols=6 class="px-8">
                     <v-text-field
                       v-model="profile.given_name"
                       label="First Name"
-                      :disabled="isDisabled"
-                      outlined
-                    ></v-text-field>
-
-                    <v-text-field
-                      v-model="profile.family_name"
-                      label="Last Name"
                       :disabled="isDisabled"
                       outlined
                     ></v-text-field>
@@ -78,10 +65,31 @@
                       outlined
                       disabled
                     ></v-text-field>
+                  </v-col>
+
+                  <v-col cols=6 class="px-8">
+                    <v-text-field
+                      v-model="profile.family_name"
+                      label="Last Name"
+                      :disabled="isDisabled"
+                      outlined
+                    ></v-text-field>
 
                     <v-text-field
                       v-model="profile.nickname"
                       label="Nickname"
+                      :disabled="isDisabled"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+
+                <v-row align="center">
+                  <v-col cols="12" class="px-8">
+
+                    <v-text-field
+                      v-model="profile.picture"
+                      label="Picture URL"
                       :disabled="isDisabled"
                       outlined
                     ></v-text-field>
@@ -151,7 +159,7 @@ export default {
         name: '',
         picture: '',
         enableMFA: false
-      },
+      }
     }
   },
   async created () {
