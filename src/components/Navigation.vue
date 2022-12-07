@@ -74,26 +74,18 @@
 			</v-menu>
 
 			<!-- Tab Navigation -->
-      <template v-slot:extension>
+      <!-- <template v-slot:extension>
         <v-tabs centered :dark="isDark" :light="!isDark">
           <v-tab to="/">
 						<v-icon>{{ icons.mdiHomeCircle }}</v-icon>
 						About
 					</v-tab>
-					<!-- <v-tab to="/join" v-if="orgType	== 'Carrier'">
-						<v-icon>{{ icons.mdiAccountPlus }}</v-icon>
-						Join Us!
-					</v-tab>
-					<v-tab to="/administrator" v-if="hasRole('Administrator')">
-						<v-icon>{{ icons.mdiDeveloperBoard }}</v-icon>
-						Administrator
-					</v-tab> -->
 					<v-tab to="/profile" v-if="$auth.isAuthenticated">
 						<v-icon>{{ icons.mdiAccountCircle }}</v-icon>
 						My Dashboard
 					</v-tab>
         </v-tabs>
-      </template>
+      </template> -->
     </v-app-bar>
 
 		<!-- Navigation Drawer -->

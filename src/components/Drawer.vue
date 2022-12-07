@@ -24,6 +24,30 @@
       <!-- user specific navigation -->
       <v-list dense nav>
 
+        <v-list-item to="/">
+          <v-list-item-icon>
+            <v-icon>{{ icons.mdiHomeCircle }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>
+              About
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item v-if="$auth.isAuthenticated" to="/profile">
+          <v-list-item-icon>
+            <v-icon>{{ icons.mdiAccountCircle }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>
+              My Profile
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item v-if="isType('Carrier')" to="/brokers">
           <v-list-item-icon>
             <v-icon>{{ icons.mdiShieldHome }}</v-icon>
@@ -50,7 +74,7 @@
         
         <v-list-item v-if="hasRole('Member')" to="/member">
           <v-list-item-icon>
-            <v-icon>{{ icons.mdiMonitorDashboard }}</v-icon>
+            <v-icon>{{ icons.mdiApplicationCog }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -78,9 +102,11 @@
 
 <script>
 import {
-  mdiShieldCar,
+  mdiHomeCircle,
+  mdiAccountCircle,
   mdiShieldHome,
   mdiMonitorDashboard,
+  mdiApplicationCog,
   mdiDeveloperBoard,
   mdiCogOutline
 } from '@mdi/js'
@@ -90,8 +116,11 @@ export default {
   data () {
     return {
       icons: {
+        mdiHomeCircle,
+        mdiAccountCircle,
         mdiShieldHome,
         mdiMonitorDashboard,
+        mdiApplicationCog,
         mdiDeveloperBoard,
         mdiCogOutline
       }
