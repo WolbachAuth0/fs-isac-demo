@@ -11,9 +11,18 @@
                     :items-per-page="5"
                     class="elevation-1"
       >
-        <template v-slot:item.id="{ item }">
+        <template v-slot:item.branding.logo_url="{ item }">
           <v-avatar rounded class="light-blue lighten-4">
-            <org-logo :orgId="item.id" :maxHeight="40" :maxWidth="40"></org-logo>
+            <v-img :src="item.branding.logo_url"
+                   :max-height="40"
+                   :max-width="40"
+                   v-if="item.branding.logo_url"
+            ></v-img>
+            <v-progress-circular indeterminate
+                                 color="primary"
+                                 :size="40"
+                                 v-else
+            ></v-progress-circular>
           </v-avatar>
         </template>
       
@@ -23,6 +32,12 @@
           </v-chip>
         </template>
 
+        <template v-slot:item.id="{ item }">
+          <v-btn class="mx-2" fab small color="error" @click="deleteBroker(item.id)">
+            <v-icon dark color="white">mdi-delete</v-icon>
+          </v-btn>
+        </template>
+
       </v-data-table>
     </v-card>
 
@@ -30,20 +45,19 @@
 </template>
 
 <script>
-import OrgLogo from '@/components/OrgLogo.vue'
+import EventBus from '../../helpers/eventBus.js'
+
 
 export default {
   name: 'BrokerOverview',
-  components: {
-    OrgLogo
-  },
   data () {
     return {
       table: {
         headers: [
-          { text: 'Logo', value: 'id', sortable: false, align: 'start' },
+          { text: 'Logo', value: 'branding.logo_url', sortable: false, align: 'start' },
           { text: 'Name', value: 'display_name', sortable: true },
-          { text: 'Type', value: 'metadata.type', sortable: true }
+          { text: 'Type', value: 'metadata.type', sortable: true },
+          { text: 'Edit', value: 'id', sortable: false }
         ]
       },
       brokers: []
@@ -57,10 +71,21 @@ export default {
   methods: {
     async getOrganizations () {
       const response = await this.$http(null).get(`/organizations`)
+      console.log(response.data.data)
       return response.data
     },
     chipColor (typestring) {
       return typestring == 'Carrier' ? 'primary' : 'secondary'
+    },
+    async deleteBroker (orgId) {
+      const announcement = {
+        text: 'WORK IN PROGRESS! Deleting Brokers is not supported yet.',
+        type: 'info',
+        top: true,
+        right: true,
+        left: false
+      }
+      EventBus.$emit('announce', announcement)
     }
   }
 }

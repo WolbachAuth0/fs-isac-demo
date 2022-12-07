@@ -40,14 +40,13 @@
 </template>
 
 <script>
-import BrokerOverview from '@/components/Broker/BrokerOverview.vue'
-import BrokerCreator from '@/components/Broker/BrokerCreator.vue'
-
+import BrokerOverview from '@/components/Carrier/BrokerOverview.vue'
+import BrokerCreator from '@/components/Carrier/BrokerCreator.vue'
 
 export default {
-  name: 'Dashboard',
+  name: 'CarrierDashboard',
   metaInfo: {
-    title: 'Dashboard',
+    title: 'Carrier Dashboard',
   },
   components: {
     BrokerOverview,
