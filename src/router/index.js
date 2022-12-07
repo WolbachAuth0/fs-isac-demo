@@ -5,10 +5,10 @@ import Meta from 'vue-meta'
 
 // Views
 import Home from '@/views/Home.vue'
-import JoinUp from '@/views/JoinUp.vue'
+// import JoinUp from '@/views/JoinUp.vue'
 import Tokens from '@/views/Tokens.vue'
 import Profile from '@/views/Profile.vue'
-import BrokerDashboard from '@/views/BrokerDashboard.vue'
+import CarrierDashboard from '@/views/CarrierDashboard.vue'
 import AdminDashboard from '@/views/AdminDashboard.vue'
 import MemberDashboard from '@/views/MemberDashboard.vue'
 
@@ -32,11 +32,11 @@ const router = new Router({
       name: 'Welcome',
       component: Home
     },
-    {
-      path: '/join',
-      name: 'Register Institution',
-      component: JoinUp,
-    },
+    // {
+    //   path: '/join',
+    //   name: 'Register Institution',
+    //   component: JoinUp,
+    // },
     {
       path: '/profile',
       name: 'Profile',
@@ -52,9 +52,10 @@ const router = new Router({
     {
       path: '/brokers',
       name: 'Brokers',
-      component: BrokerDashboard,
+      component: CarrierDashboard,
       beforeEnter: authenticationGuard
     },
+    // based on user's role
     {
       path: '/administrator',
       name: 'Administrator Dashboard',
