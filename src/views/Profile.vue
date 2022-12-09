@@ -29,18 +29,25 @@
 
         <v-col cols=7>
           <v-card color="surface">
-            <v-progress-linear value="100" height="20" class="primary--text"></v-progress-linear>
+            <v-progress-linear :indeterminate="progress.indeterminate" value="100" height="20" class="primary--text"></v-progress-linear>
             
-            <v-card-title>
-              User Profile
-            </v-card-title>
-
             <v-list-item class="px-2">
               <v-list-item-avatar>
                 <img :src="profile.picture" :alt="profile.name">
               </v-list-item-avatar>
               <v-list-item-title>
                 {{ profile.email }}
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item class="px-2">
+              <v-list-item-title v-if="hasRole('Administrator')">
+                User has the <span class="red--text">Administrator</span> role in the organization.
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item class="px-2">
+              <v-list-item-title v-if="hasRole('Member')">
+                User has the <span class="blue--text">Member</span> role in the organization.
               </v-list-item-title>
             </v-list-item>
 
@@ -159,6 +166,9 @@ export default {
         name: '',
         picture: '',
         enableMFA: false
+      },
+      progress: {
+        indeterminate: false
       }
     }
   },
@@ -187,6 +197,16 @@ export default {
     isDisabled () {
       if (!this.connection) { return false }
       return !['auth0', 'email', 'sms'].includes(this.connection)
+    },
+    roles () {
+      if (!this.$auth.isAuthenticated) {
+				return []
+			}
+
+			const clientID = process.env.VUE_APP_AUTH0_CLIENT_ID
+			const data = this.$auth.isAuthenticated ? this.$auth.user[`${clientID}/data`] : { }
+			const roles = data?.roles || []
+      return roles
     }
   },
   methods: {
@@ -197,6 +217,7 @@ export default {
       return response.data
     },
     async saveChanges () {
+      this.progress.indeterminate = true
       const accesstoken = await this.$auth.getTokenSilently()
       const body = {
         given_name: this.profile.given_name,
@@ -217,7 +238,11 @@ export default {
         left: false
       }
       EventBus.$emit('announce', announcement)
+      this.progress.indeterminate = false
       return response.data
+    },
+    hasRole (rolename) {
+      return this.roles.includes(rolename)
     }
   }
 }
